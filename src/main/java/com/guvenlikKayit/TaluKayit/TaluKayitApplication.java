@@ -23,9 +23,6 @@ public class TaluKayitApplication extends VaadinWebSecurityConfigurerAdapter{
 		super.configure(http);
 		setLoginView(http, LoginView.class);
 	}
-
-
-
 	@Override
 	@Bean
 	public UserDetailsService userDetailsServiceBean() throws Exception{
