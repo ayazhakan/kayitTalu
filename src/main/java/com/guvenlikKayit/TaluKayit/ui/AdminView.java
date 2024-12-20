@@ -21,7 +21,7 @@ import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Route("admin")
+@Route("/admin")
 @RolesAllowed("ADMIN")
 public class AdminView extends VerticalLayout {
     private static final int PAGE_SIZE = 8;
