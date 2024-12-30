@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.guvenlikKayit</groupId>
-	<artifactId>TaluKayit</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>TaluKayit</name>
+	<artifactId>kayitTalu</artifactId>
+	<name>kayitTalu</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -123,7 +123,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
@@ -152,6 +152,24 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-maven-plugin</artifactId>
+				<version>${vaadin.version}</version>
+				<executions>
+					<execution>
+						<id>frontend</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>prepare-frontend</goal>
+							<goal>build-frontend</goal>
+						</goals>
+						<configuration>
+							<productionMode>true</productionMode>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -159,27 +177,8 @@
 		<profile>
 			<id>production</id>
 			<build>
-				<finalName>kayitTalu</finalName>
-				<plugins>
-					<plugin>
-						<groupId>com.vaadin</groupId>
-						<artifactId>vaadin-maven-plugin</artifactId>
-						<version>${vaadin.version}</version>
-						<executions>
-							<execution>
-								<id>frontend</id>
-								<phase>compile</phase>
-								<goals>
-									<goal>prepare-frontend</goal>
-									<goal>build-frontend</goal>
-								</goals>
-								<configuration>
-									<productionMode>true</productionMode>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
+				<defaultGoal>spring-boot:run</defaultGoal>
+				<finalName>${project.artifactId}</finalName>
 			</build>
 		</profile>
 	</profiles>
