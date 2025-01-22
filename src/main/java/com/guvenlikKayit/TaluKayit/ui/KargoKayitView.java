@@ -1,6 +1,9 @@
 package com.guvenlikKayit.TaluKayit.ui;
 
+
 import com.guvenlikKayit.TaluKayit.backend.model.GirisCikisKayit;
+import com.guvenlikKayit.TaluKayit.backend.model.KargoKayit;
+import com.guvenlikKayit.TaluKayit.backend.service.KargoKayitService;
 import com.guvenlikKayit.TaluKayit.backend.service.KayitService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -21,23 +24,41 @@ import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Route("/admin")
+@Route("/kargo")
 @RolesAllowed("ADMIN")
-public class AdminView extends VerticalLayout {
+public class KargoKayitView extends VerticalLayout {
     private static final int PAGE_SIZE = 8;
-    private List<GirisCikisKayit> allRecords;
-    private GridCrud<GirisCikisKayit> crud; // Use GridCrud instead of a standalone Grid
+    private List<KargoKayit> allRecords;
+    private GridCrud<KargoKayit> crud; // Use GridCrud instead of a standalone Grid
     private int currentPage = 0;
     private int totalPages;
 
-    public AdminView(KayitService service) {
+    public KargoKayitView(KargoKayitService service) {
 
-        this.crud = new GridCrud<>(GirisCikisKayit.class, service);
+        this.crud = new GridCrud<>(KargoKayit.class, service);
         this.allRecords = service.findAll();
         crud.getGrid().setPageSize(PAGE_SIZE);
         totalPages = (int) Math.ceil((double) allRecords.size() / PAGE_SIZE);
-        crud.getGrid().setColumns("aracPlaka", "cikisSaati", "donusSaati", "gidilenYer", "aracKullanicisi", "tarih");
-        crud.getCrudFormFactory().setVisibleProperties("aracPlaka", "cikisSaati", "donusSaati", "gidilenYer", "aracKullanicisi");
+        crud.getGrid().setColumns(
+                "gelenTarih",
+                "gonderenFirma",
+                "gondericiIsim",
+                "kargoIcerik",
+                "kargoTakipNo",
+                "aliciIsim",
+                "teslimTarihi",
+                "aciklama"
+        );
+        crud.getCrudFormFactory().setVisibleProperties(
+                "gelenTarih",
+                "gonderenFirma",
+                "gondericiIsim",
+                "kargoIcerik",
+                "kargoTakipNo",
+                "aliciIsim",
+                "teslimTarihi",
+                "aciklama"
+        );
         TextField searchField = new TextField();
         searchField.setWidth("300px");
         searchField.setPlaceholder("Search");
@@ -56,7 +77,7 @@ public class AdminView extends VerticalLayout {
         HorizontalLayout logoutLayout = new HorizontalLayout(logoutButton);
         logoutLayout.setWidthFull();
         logoutLayout.setJustifyContentMode(JustifyContentMode.END);
-        H1 header = new H1("TALU TEKSTIL GIRIS CIKIS KAYIT");
+        H1 header = new H1("TALU TEKSTIL KARGO KAYIT");
         header.getElement().getStyle().set("text-align", "center");
         HorizontalLayout paginationLayout = createPaginationLayout(searchField);
         VerticalLayout controlsLayout = new VerticalLayout(searchField, crud, logoutLayout, paginationLayout);
@@ -71,14 +92,16 @@ public class AdminView extends VerticalLayout {
         updateGrid("");
     }
     private void updateGrid(String searchTerm) {
-        List<GirisCikisKayit> filteredRecords = allRecords.stream()
+        List<KargoKayit> filteredRecords = allRecords.stream()
                 .filter(record ->
-                        record.getAracPlaka().toLowerCase().contains(searchTerm) ||
-                                record.getGidilenYer().toLowerCase().contains(searchTerm) ||
-                                record.getAracKullanicisi().toLowerCase().contains(searchTerm) ||
-                                record.getCikisSaati().toLowerCase().contains(searchTerm)||
-                                record.getDonusSaati().toLowerCase().contains(searchTerm)||
-                                record.getTarih().toString().toLowerCase().contains(searchTerm)
+                        record.getAliciIsim().toLowerCase().contains(searchTerm) ||
+                                record.getAciklama().toLowerCase().contains(searchTerm) ||
+                                record.getGelenTarih().toLowerCase().contains(searchTerm) ||
+                                record.getGonderenFirma().toLowerCase().contains(searchTerm) ||
+                                record.getTeslimTarihi().toLowerCase().contains(searchTerm)||
+                                record.getGondericiIsim().toLowerCase().contains(searchTerm)||
+                                record.getKargoIcerik().toLowerCase().contains(searchTerm)||
+                                record.getKargoTakipNo().toLowerCase().contains(searchTerm)
                 )
                 .collect(Collectors.toList());
         int start = currentPage * PAGE_SIZE;
